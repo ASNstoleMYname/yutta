@@ -12,14 +12,16 @@ var gPrefix ;
 var x = 0;
 var voteG = new Array('');
 var voteEmbed;
+var voteSucces;
 var embedColor = 8210404;
 var arrLength;
 var h = 0;
 var poles = new Array('1');
-var brLongStrongThin = '~~------------------------------------------------------------------------------------------------~~';
+var brLongStrongThin = '~~-----------------------------------------------------------------------------------------------~~';
 var brLongStrongExtraTHICC = '**~~===========================================================~~**';
 var brShortWeakThin = '----------------------------';
 var brShortstronThin = '~~----------------------------~~';
+var brTesting = ':heavy_minus_sign: '
 var vYes = 0;
 var vNo = 0;
 var vNut = 0;
@@ -36,39 +38,14 @@ var place;
 var polesNoActivePoleWarning = 'there is not active pole now';
 var cheking ;
 var adress;
+//------------------------------------------------------------------------------------------
+const helpEmbed = {
+    color:embedColor,
+    title: 'list of usefull comands',
+
+};
 //-------------------------------------------------------------------------------------------
-// function getInput(startPrefix,saver,endPrefix) {
-//     console.log('-----------------')
-//     if(startPrefix === undefined){
-//         console.log('this should come out once');
-//         argsPos++;
-//         return saver[x] = args[argsPos - 1];
-//     }else{
-//         console.log(args[argsPos]);
-//         if(args[argsPos] === startPrefix){
-//             i++;
-//             argsPos++;
-//             try{
-//                 while(i < 2){
-//                     if(args[argsPos] === endPrefix){
-//                         i++;
-//                         argsPos++;
-//                     }else{
-//                         saver[x] = args[argsPos];
-//                         x++;
-//                         argsPos++;
-//                     }
-//                 }
-//             }
-//             catch{
-//                 message.channel.send("an eror has been made");
-//             }
-//         }
-//         i =0;
-//         x =0;
-//         return saver;
-//     }
-// };
+
 function hardReset(){
     watchDog = false;
     argsPos = 0;
@@ -84,7 +61,6 @@ function arrayClear(funcArray){
         m += 1;
     }
 };
-
 //------------------------------------------------------------
 bot.on('ready',() => {
     console.log('online');
@@ -192,13 +168,13 @@ bot.on('message', message =>{
                 message.channel.sendMessage("you made an error");
                 return;
             }
-            this.voteEmbed =  {
+            this.voteEmbed = {
                 "title": "vote",
                 "description": "**" + this.paragraphText + "**",
                 "color":embedColor,
                 "fields": [
                     {
-                        "name":':',
+                        "name":brTesting,
                         "value":brLongStrongThin
                     },
                     {
@@ -237,6 +213,26 @@ bot.on('message', message =>{
             };
             return this;
         }
+        greateEnd(){
+            console.log("fuck");
+            this.voteSucces = {
+                "title": "vote: **",
+                "description":"wow",
+                "color":embedColor,
+                "fields": [
+                    {
+                        "name":"this",
+                        "value":"dunn0"
+                    }
+                ]
+            }
+            return this;
+        }
+        sendEnd(){
+            console.log("me");
+            message.channel.send({emded:this.voteSucces});
+            return this;
+        }
         update(){
             this.voteEmbed =  {
                 "title": "vote",
@@ -263,15 +259,17 @@ bot.on('message', message =>{
                         "inline": true
                     },
                     {
-                        "name":this.vYes,
+                        "name":this.vYes + "/" + this.Votes,
                         "value":brShortstronThin,
                         "inline": true
-                    },                    {
-                        "name":this.vNo,
+                    },
+                    {
+                        "name":this.vNo + "/" + this.Votes,
                         "value":brShortstronThin,
                         "inline": true
-                    },                    {
-                        "name":this.vNut,
+                    },
+                    {
+                        "name":this.vNut + "/" + this.Votes,
                         "value":brShortstronThin,
                         "inline": true
                     },
@@ -353,6 +351,7 @@ bot.on('message', message =>{
                     watchDog = false;
                     poles[pPos].plusVyes().plusvote().update().Send().checkComplete();
                     if(deleteElement === true){
+                        poles[pPos].greateEnd().sendEnd();
                         deleteArrayEllement(message.channel.id);
                         poles.remove(adress);
                     }
@@ -407,7 +406,6 @@ bot.on('message', message =>{
                     hardReset();
                     if(poles.length === 1){
                         message.channel.sendMessage(polesNoActivePoleWarning);
-
                     }else{
                     //zoekt active polles
                     s = null;
@@ -436,6 +434,11 @@ bot.on('message', message =>{
                 }
                 }
 //---------------------------------------------------------------------------------------
+                else{
+                    if(command === "help"){
+                        message.channel.sendEmbed(helpEmbed);
+                    };
+                }
             }/*if num 3 */
         }/*if num 2 */
     }/* if num 1 */
